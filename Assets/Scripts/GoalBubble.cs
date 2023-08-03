@@ -10,6 +10,8 @@ public class GoalBubble : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        GetComponent<Collider2D>().enabled = false; // disable collider so it doesn't trigger again
+        
         audioSource.pitch += Random.Range(audioPitchVariation * -1, audioPitchVariation);
         
         transform.DOScale(0, 0.2f).OnComplete(() => Destroy(gameObject));
