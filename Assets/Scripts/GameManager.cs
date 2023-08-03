@@ -14,19 +14,30 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private BubbleSpawner bubbleSpawner;
     [Space, SerializeField] private GameObject player;
+    [Space,SerializeField] private TextMeshProUGUI popsText;
     
     [Header("Death")]
     [SerializeField] private AudioSource deathSound;
-    [SerializeField] private CanvasGroup deathScreen;
+    [SerializeField] private AudioSource outOfPopsSound;
+    [Space,SerializeField] private CanvasGroup deathScreen;
+    [Space, SerializeField] private TextMeshProUGUI deathReason;
+    [Space, SerializeField] private string deathText;
+    [SerializeField] private string noMorePopsText;
     
     [Header("Win")]
     [SerializeField] private AudioSource winSound;
     [SerializeField] private CanvasGroup winScreen;
     [SerializeField] private TextMeshProUGUI secondsText;
     [SerializeField] private TextMeshProUGUI bestTimeText;
+    
+    [Header("Settings")]
+    [SerializeField] private int maxPops = 250;
+    
 
     private float timer = 0.00f;
     private float bestTime = 0.00f;
+
+    private int pops;
     
     public static GameManager Instance { get; private set; }
 
@@ -45,6 +56,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        pops = maxPops;
+        popsText.text = pops.ToString();
+        
         bestTime = PlayerPrefs.GetFloat("BestTime", 0.00f);
         
         deathScreen.alpha = 0;
@@ -63,10 +77,34 @@ public class GameManager : MonoBehaviour
 
     public void Die()
     {
+        deathReason.text = deathText;
+        
         player.GetComponent<PlayerMovement>().enabled = false;
+
         float animationTime = deathSound.clip.length;
         CameraShaker.Instance.Shake(2.2f, animationTime);
         deathSound.Play();
+
+        player.transform.DOScale(0, animationTime).OnComplete(() =>
+        {
+            Destroy(player);
+        });
+        
+        SetCursor(true);
+        
+        deathScreen.gameObject.SetActive(true);
+        deathScreen.DOFade(1, animationTime);
+    }
+
+    public void DieTooManyPops()
+    {
+        deathReason.text = noMorePopsText;
+        
+        player.GetComponent<PlayerMovement>().enabled = false;
+
+        float animationTime = outOfPopsSound.clip.length;
+        CameraShaker.Instance.Shake(2.2f, animationTime);
+        outOfPopsSound.Play();
 
         player.transform.DOScale(0, animationTime).OnComplete(() =>
         {
@@ -85,7 +123,7 @@ public class GameManager : MonoBehaviour
         float animationTime = winSound.clip.length;
         winSound.Play();
 
-        player.transform.DOScale(0, 0.2f).OnComplete(() =>
+        player.transform.DOScale(0, animationTime).OnComplete(() =>
         {
             Destroy(player);
         });
@@ -127,6 +165,17 @@ public class GameManager : MonoBehaviour
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+    
+    public void OnBubblePop()
+    {
+        pops--;
+        popsText.text = pops.ToString();
+        
+        if (pops <= 0)
+        {
+            DieTooManyPops();
         }
     }
 }

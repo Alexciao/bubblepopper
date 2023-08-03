@@ -42,5 +42,7 @@ public class Bubble : MonoBehaviour
         {
             GameManager.Instance.Die();
         }
+        
+        GameManager.Instance.OnBubblePop();
     }
 }
