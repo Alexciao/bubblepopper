@@ -1,6 +1,8 @@
+using System;
 using System.Security.Cryptography;
 using UnityEngine;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public class Bubble : MonoBehaviour
 {
@@ -21,13 +23,19 @@ public class Bubble : MonoBehaviour
         if (Random.Range(0f, 1f) <= bombChance)
         {
             hasBomb = true;
-            bomb.SetActive(true);
+            UpdateBomb();
         }
         else
         {
             hasBomb = false;
-            bomb.SetActive(false);
+            UpdateBomb();
         }
+    }
+
+    private void UpdateBomb()
+    {
+        if (!hasBomb) bomb.SetActive(false);
+        else bomb.SetActive(true);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
