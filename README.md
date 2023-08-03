@@ -7,6 +7,7 @@ A really weird Unity game where you pop bubbles.
 Move through a field of bubbles, but be careful! Some have bombs in them.
 Avoid the bombs and find the goal (green bubble).
 You have a limited number of pops: use them wisely.
+Try to find the goal in the shortest time possible!
 
 Happy playing!
 
