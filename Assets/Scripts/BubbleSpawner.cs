@@ -51,9 +51,10 @@ public class BubbleSpawner : MonoBehaviour
                     Vector3 goalSpawnPos = new Vector3(startPos.x + offsetX + col * bubbleSize.x,
                         startPos.y - offsetY - row * bubbleSize.y, 0f);
 
-                    // Instantiate the goal at the calculated position
-                    Instantiate(goalPrefab, goalSpawnPos, Quaternion.identity);
                     
+                    // Instantiate the goal at the calculated position
+                    
+                    Instantiate(goalPrefab, goalSpawnPos, Quaternion.identity);
                     Debug.Log("Spawned goal at Row=" + row + ", Column=" + col + ", Position=" + goalSpawnPos);
                     continue;
                 }
@@ -67,5 +68,6 @@ public class BubbleSpawner : MonoBehaviour
                 Instantiate(bubblePrefab, spawnPos, Quaternion.identity);
             }
         }
+
     }
 }
