@@ -458,7 +458,7 @@ MonoBehaviour:
   winScreen: {fileID: 40359145}
   secondsText: {fileID: 1849632949}
   bestTimeText: {fileID: 1131092839}
-  maxPops: 250
+  maxPops: 300
 --- !u!114 &120814423
 MonoBehaviour:
   m_ObjectHideFlags: 0
