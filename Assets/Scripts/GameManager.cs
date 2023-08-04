@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
         player.GetComponent<PlayerMovement>().enabled = false;
 
         float animationTime = outOfPopsSound.clip.length;
-        CameraShaker.Instance.Shake(2.2f, animationTime);
+        CameraShaker.Instance.Shake(1.0f, animationTime);
         outOfPopsSound.Play();
 
         player.transform.DOScale(0, animationTime).OnComplete(() =>
