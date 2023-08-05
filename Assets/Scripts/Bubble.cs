@@ -37,7 +37,7 @@ public class Bubble : MonoBehaviour
             UpdateBomb();
         }
         
-        if (Random.Range(0f, 1f) <= powerupChance)
+        if (Random.Range(0f, 1f) <= powerupChance && !hasBomb)
         {
             hasPowerup = true;
             UpdatePowerup();
