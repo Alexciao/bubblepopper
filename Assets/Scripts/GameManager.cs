@@ -138,6 +138,11 @@ public class GameManager : MonoBehaviour
         winScreen.DOFade(1, animationTime);
     }
 
+    public void Powerup()
+    {
+        
+    }
+
     private double FormatTime(float time)
     {
         return Math.Round(timer, 2);
