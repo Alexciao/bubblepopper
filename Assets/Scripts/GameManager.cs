@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     
 
     private float timer = 0.00f;
-    private float bestTime = 0.00f;
+    private float bestTime = 100.00f;
 
     private int pops;
     
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         
         distanceTextGroup.gameObject.SetActive(false);
         
-        bestTime = PlayerPrefs.GetFloat("BestTime", 0.00f);
+        bestTime = PlayerPrefs.GetFloat("BestTime", 100.00f);
         
         deathScreen.alpha = 0;
         deathScreen.gameObject.SetActive(false);
