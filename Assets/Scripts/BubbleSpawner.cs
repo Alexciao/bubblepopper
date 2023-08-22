@@ -32,9 +32,8 @@ public class BubbleSpawner : MonoBehaviour
         Debug.Log("Grid Dimensions: Rows=" + rows + ", Columns=" + columns);
 
         // Get a random row & column to put the goal in
-        // Also make it so that the goal can't spawn in a 10x10 block in the center
-        int goalRow = Random.Range(10, rows - 10);
-        int goalCol = Random.Range(10, columns - 10);
+        int goalRow = Random.Range(0, rows);
+        int goalCol = Random.Range(0, columns);
         
         // Spawn the bubbles in a grid
         for (int row = 0; row < rows; row++)
