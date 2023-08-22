@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
     
     private double FormatTime(float time)
     {
-        return Math.Round(timer, 2);
+        return Math.Round(time, 2);
     }
 
     private string FormatDistance(float distance)
