@@ -154,7 +154,9 @@ public class GameManager : MonoBehaviour
 
     public void Powerup()
     {
+        distanceTextGroup.DOFade(0, 0);
         distanceTextGroup.gameObject.SetActive(true);
+        
         // Fade in
         distanceTextGroup.DOFade(1, 0.2f);
         
