@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BubbleSpawner bubbleSpawner;
     [Space, SerializeField] private GameObject player;
     [Space,SerializeField] private TextMeshProUGUI popsText;
+    [SerializeField] private TextMeshProUGUI distanceText;
     
     [Header("Death")]
     [SerializeField] private AudioSource deathSound;
@@ -59,6 +60,9 @@ public class GameManager : MonoBehaviour
         pops = maxPops;
         popsText.text = pops.ToString();
         
+        distanceText.gameObject.SetActive(false);
+        distanceText.transform.parent.gameObject.SetActive(false);
+        
         bestTime = PlayerPrefs.GetFloat("BestTime", 0.00f);
         
         deathScreen.alpha = 0;
@@ -73,6 +77,13 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
+
+        try
+        {
+            distanceText.text = FormatDistance(Vector3.Distance(player.transform.position, bubbleSpawner.goalPosition));
+        }
+        catch (MissingReferenceException) {}
+        
     }
 
     public void Die()
@@ -140,12 +151,28 @@ public class GameManager : MonoBehaviour
 
     public void Powerup()
     {
+        distanceText.gameObject.SetActive(true);
+        distanceText.transform.parent.gameObject.SetActive(true);
         
+        // Fade in
+        distanceText.DOFade(1, 0.2f);
+        
+        // Fade out after 1 second
+        distanceText.DOFade(0, 0.2f).SetDelay(1.0f).OnComplete(() =>
+        {
+            distanceText.gameObject.SetActive(false);
+            distanceText.transform.parent.gameObject.SetActive(false);
+        });
     }
-
+    
     private double FormatTime(float time)
     {
         return Math.Round(timer, 2);
+    }
+
+    private string FormatDistance(float distance)
+    {
+        return Math.Round(distance, 2).ToString() + "m";
     }
 
     private float GetHighScore()
