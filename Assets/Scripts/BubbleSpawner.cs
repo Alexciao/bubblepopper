@@ -8,6 +8,8 @@ public class BubbleSpawner : MonoBehaviour
     [SerializeField] private GameObject bubblePrefab;
     [SerializeField] private GameObject goalPrefab;
 
+    [Space] public Vector2 goalPosition; 
+        
     public void SpawnBubbles()
     {
         // Get the bubble size
@@ -30,8 +32,9 @@ public class BubbleSpawner : MonoBehaviour
         Debug.Log("Grid Dimensions: Rows=" + rows + ", Columns=" + columns);
 
         // Get a random row & column to put the goal in
-        int goalRow = Random.Range(0, rows);
-        int goalCol = Random.Range(0, columns);
+        // Also make it so that the goal can't spawn in a 10x10 block in the center
+        int goalRow = Random.Range(10, rows - 10);
+        int goalCol = Random.Range(10, columns - 10);
         
         // Spawn the bubbles in a grid
         for (int row = 0; row < rows; row++)
@@ -51,6 +54,7 @@ public class BubbleSpawner : MonoBehaviour
                     Vector3 goalSpawnPos = new Vector3(startPos.x + offsetX + col * bubbleSize.x,
                         startPos.y - offsetY - row * bubbleSize.y, 0f);
 
+                    goalPosition = goalSpawnPos;
                     
                     // Instantiate the goal at the calculated position
                     
