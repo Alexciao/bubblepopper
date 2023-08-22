@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BubbleSpawner bubbleSpawner;
     [Space, SerializeField] private GameObject player;
     [Space,SerializeField] private TextMeshProUGUI popsText;
-    [SerializeField] private TextMeshProUGUI distanceText;
+    [SerializeField] private CanvasGroup distanceTextGroup;
+    [SerializeField] private TextMeshProUGUI distanceText; 
     
     [Header("Death")]
     [SerializeField] private AudioSource deathSound;
@@ -60,8 +61,7 @@ public class GameManager : MonoBehaviour
         pops = maxPops;
         popsText.text = pops.ToString();
         
-        distanceText.gameObject.SetActive(false);
-        distanceText.transform.parent.gameObject.SetActive(false);
+        distanceTextGroup.gameObject.SetActive(false);
         
         bestTime = PlayerPrefs.GetFloat("BestTime", 0.00f);
         
@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
 
     public void Die()
     {
+        deathScreen.DOFade(0, 0);
         deathReason.text = deathText;
         
         player.GetComponent<PlayerMovement>().enabled = false;
@@ -109,6 +110,7 @@ public class GameManager : MonoBehaviour
 
     public void DieTooManyPops()
     {
+        deathScreen.DOFade(0, 0);
         deathReason.text = noMorePopsText;
         
         player.GetComponent<PlayerMovement>().enabled = false;
@@ -130,6 +132,7 @@ public class GameManager : MonoBehaviour
     
     public void Win()
     {
+        winScreen.DOFade(0, 0);
         player.GetComponent<PlayerMovement>().enabled = false;
         float animationTime = winSound.clip.length;
         winSound.Play();
@@ -151,17 +154,14 @@ public class GameManager : MonoBehaviour
 
     public void Powerup()
     {
-        distanceText.gameObject.SetActive(true);
-        distanceText.transform.parent.gameObject.SetActive(true);
-        
+        distanceTextGroup.gameObject.SetActive(true);
         // Fade in
-        distanceText.DOFade(1, 0.2f);
+        distanceTextGroup.DOFade(1, 0.2f);
         
         // Fade out after 1 second
-        distanceText.DOFade(0, 0.2f).SetDelay(1.0f).OnComplete(() =>
+        distanceTextGroup.DOFade(0, 0.2f).SetDelay(1.0f).OnComplete(() =>
         {
-            distanceText.gameObject.SetActive(false);
-            distanceText.transform.parent.gameObject.SetActive(false);
+            distanceTextGroup.gameObject.SetActive(false);
         });
     }
     
