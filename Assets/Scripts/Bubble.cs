@@ -10,19 +10,21 @@ public class Bubble : MonoBehaviour
     [Header("Settings")] 
     [SerializeField, Range(0f, 1f)] private float bombChance = 0.05f;
     [SerializeField, Range(0f, 1f)] private float powerupChance = 0.05f;
+    [SerializeField, Range(0f, 1f)] private float giverChance = 0.005f;
 
     [SerializeField, Range(0f, 0.1f)] private float audioPitchVariation = 0.05f;
 
     [Header("References")] 
     [SerializeField] private GameObject bomb;
     [SerializeField] private GameObject powerup;
-
+    [SerializeField] private GameObject giver;
+    
     [Space, SerializeField] private AudioSource audioSource;
     
     [Header("Values")]
     public bool hasBomb;
-
     public bool hasPowerup;
+    public bool hasGiver;
 
     private void Start()
     {
@@ -47,6 +49,17 @@ public class Bubble : MonoBehaviour
             hasPowerup = false;
             UpdatePowerup();
         }
+        
+        if (Random.Range(0f, 1f) <= giverChance && !hasBomb && !hasPowerup)
+        {
+            hasGiver = true;
+            UpdateGiver();
+        }
+        else
+        {
+            hasGiver = false;
+            UpdateGiver();
+        }
     }
 
     private void UpdateBomb()
@@ -59,6 +72,12 @@ public class Bubble : MonoBehaviour
     {
         if (!hasPowerup) powerup.SetActive(false);
         else powerup.SetActive(true); 
+    }
+    
+    private void UpdateGiver()
+    {
+        if (!hasGiver) giver.SetActive(false);
+        else giver.SetActive(true); 
     }
     
     private void OnTriggerEnter2D(Collider2D other)
@@ -78,6 +97,11 @@ public class Bubble : MonoBehaviour
         if (hasPowerup)
         {
             GameManager.Instance.Powerup();
+        }
+        
+        if (hasGiver)
+        {
+            GameManager.Instance.Giver();
         }
         
         GameManager.Instance.OnBubblePop();

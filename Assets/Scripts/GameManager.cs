@@ -14,8 +14,9 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private BubbleSpawner bubbleSpawner;
     [Space, SerializeField] private GameObject player;
-    [Space,SerializeField] private TextMeshProUGUI popsText;
-    [SerializeField] private CanvasGroup distanceTextGroup;
+    [Space, SerializeField] private GameObject popsTextGroup;
+    [SerializeField] private TextMeshProUGUI popsText;
+    [Space, SerializeField] private CanvasGroup distanceTextGroup;
     [SerializeField] private TextMeshProUGUI distanceText; 
     
     [Header("Death")]
@@ -25,6 +26,12 @@ public class GameManager : MonoBehaviour
     [Space, SerializeField] private TextMeshProUGUI deathReason;
     [Space, SerializeField] private string deathText;
     [SerializeField] private string noMorePopsText;
+    
+    [Header("Powerup")]
+    [SerializeField] private AudioSource powerupSound;
+    
+    [Header("Giver")]
+    [SerializeField] private AudioSource giverSound;
     
     [Header("Win")]
     [SerializeField] private AudioSource winSound;
@@ -40,6 +47,9 @@ public class GameManager : MonoBehaviour
     private float bestTime = 0.00f;
 
     private int pops;
+    
+    private Vector2 popsTextOriginalPosition;
+    private Vector2 distanceTextOriginalPosition;
     
     public static GameManager Instance { get; private set; }
 
@@ -60,6 +70,9 @@ public class GameManager : MonoBehaviour
     {
         pops = maxPops;
         popsText.text = pops.ToString();
+        
+        popsTextOriginalPosition = popsTextGroup.transform.position;
+        distanceTextOriginalPosition = distanceText.transform.parent.position;
         
         distanceTextGroup.gameObject.SetActive(false);
         
@@ -159,6 +172,8 @@ public class GameManager : MonoBehaviour
         
         // Fade in
         distanceTextGroup.DOFade(1, 0.2f);
+     
+        powerupSound.Play();
         
         // Fade out after 1 second
         distanceTextGroup.DOFade(0, 0.2f).SetDelay(1.0f).OnComplete(() =>
@@ -187,6 +202,20 @@ public class GameManager : MonoBehaviour
 
         return bestTime;
     }
+
+    public void Giver()
+    {
+        giverSound.Play();
+        
+        // Tween the pops text to the powerup text's position
+        popsTextGroup.transform.DOMove(distanceTextOriginalPosition, 0.2f).SetEase(Ease.InOutCubic).OnComplete(() =>
+        {
+            IncreasePops(30);
+            
+            // Tween the pops text back to its original position
+            popsTextGroup.transform.DOMove(popsTextOriginalPosition, 0.2f).SetEase(Ease.InOutCubic).SetDelay(0.75f);
+        });
+    }
     
     public void SetCursor(bool status)
     {
@@ -204,12 +233,17 @@ public class GameManager : MonoBehaviour
     
     public void OnBubblePop()
     {
-        pops--;
-        popsText.text = pops.ToString();
+        IncreasePops(-1);
         
         if (pops <= 0)
         {
             DieTooManyPops();
         }
+    }
+
+    public void IncreasePops(int num)
+    {
+        pops += num;
+        popsText.text = pops.ToString();
     }
 }
