@@ -1206,7 +1206,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: popbubbles
+  m_text: bubblepopper
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e0f8ad2eed336b44a40d3772a4f4043, type: 2}
   m_sharedMaterial: {fileID: 4763223855016574496, guid: 0e0f8ad2eed336b44a40d3772a4f4043, type: 2}
